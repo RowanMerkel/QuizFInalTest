@@ -6,7 +6,7 @@ namespace QuizTestTestTestFinal
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Git is werkende.");
+            Console.WriteLine("");
         }
     }
 }
