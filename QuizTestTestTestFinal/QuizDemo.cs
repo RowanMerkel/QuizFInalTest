@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace QuizTestTestTestFinal
@@ -10,14 +11,16 @@ namespace QuizTestTestTestFinal
 
         public QuizDemo()
         {
-            initQuestions();
+            InitQuestions();
 
-             
+            DisplayDifficultyQuestions(listOfOpenQuestions, 2);
+
+            ConsoleApp();
         }
 
 
         //Initializes the questions before hand.
-        public void initQuestions()
+        public void InitQuestions()
         {
             OpenQuestions question1 = new OpenQuestions();
             question1.TheQuestion = "What is the capital of the Netherlands?";
@@ -44,11 +47,40 @@ namespace QuizTestTestTestFinal
 
         public void ConsoleApp()
         {
+            Console.WriteLine("Dit is een quiz. Succes!");
+            Console.WriteLine("Als u met makkelijke vragen wilt beginnen, type 1.");
+            Console.WriteLine("Als u wilt stoppen, druk op escape.");
+
+            Boolean x = true;
+
+
 
         }
 
+        //Sort questions from easy to hard.
+        public IEnumerable<Question> SortQuestionsOnDifficulty(IEnumerable<Question> question)
+        {
+            var list =
+               from diff in listOfOpenQuestions
+               orderby diff.Difficulty ascending
+               select diff;
+            return list;
+        }
+
+        //Display only the questions with a selected difficulty.
+        public IEnumerable<Question> DisplayDifficultyQuestions(IEnumerable<Question> question, int difficulty)
+        {
+            IEnumerable<Question> list =
+               from diff in listOfOpenQuestions
+               where diff.Difficulty == difficulty
+               select diff;
+            Console.WriteLine(list.First().TheQuestion);
+            return list;
+        }
+
+
         //Compares the answer given against the answer that is provided with the question.
-        public string compareAnswer(OpenQuestions question, string answer)
+        public string CompareAnswer(OpenQuestions question, string answer)
         {
             if(question.Answer.ToLower() == answer.ToLower()){
                 return answer + " is the correct answer. Good job!";
