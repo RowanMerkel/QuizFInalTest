@@ -6,7 +6,7 @@ namespace QuizTestTestTestFinal
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("");
+            QuizDemo quizDemo = new QuizDemo();
         }
     }
 }

@@ -11,7 +11,8 @@ namespace QuizTestTestTestFinal
     class OpenQuestions : Question
     {
         public string TheQuestion { get; set; }
-        public IList Options { get; set; }
+        //public IList Options { get; set; }
+        public string Category { get; set; }
         public string Answer { get; set; }
         public int Difficulty { get; set; }
     }
