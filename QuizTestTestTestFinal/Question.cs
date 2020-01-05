@@ -8,7 +8,6 @@ namespace QuizTestTestTestFinal
     interface Question
     {
         string TheQuestion { get; set; }
-        //IList Options { get; set; }
         string Category { get; set; }
         string Answer { get; set; }
         int Difficulty { get; set; }
