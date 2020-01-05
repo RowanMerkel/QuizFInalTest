@@ -7,13 +7,13 @@ namespace QuizTestTestTestFinal
 {
     class QuizDemo
     {
-        IList<OpenQuestions> listOfOpenQuestions = new List<OpenQuestions>();
+        IList<Question> listOfQuestions = new List<Question>();
+        IEnumerable<Question> displayDifficultyQuestions = new List<Question>();
+        IEnumerable<Question> sortQuestionsOnDifficulty = new List<Question>();
 
         public QuizDemo()
         {
             InitQuestions();
-
-            DisplayDifficultyQuestions(listOfOpenQuestions, 2);
 
             ConsoleApp();
         }
@@ -40,19 +40,78 @@ namespace QuizTestTestTestFinal
             question3.Category = "General knowledge";
             question3.Difficulty = 3;
 
-            listOfOpenQuestions.Add(question3);
-            listOfOpenQuestions.Add(question1);
-            listOfOpenQuestions.Add(question2);
+            listOfQuestions.Add(question3);
+            listOfQuestions.Add(question1);
+            listOfQuestions.Add(question2);
         }
 
         public void ConsoleApp()
         {
             Console.WriteLine("Dit is een quiz. Succes!");
-            Console.WriteLine("Als u met makkelijke vragen wilt beginnen, type 1.");
-            Console.WriteLine("Als u wilt stoppen, druk op escape.");
+            Console.WriteLine("Als u met makkelijke vragen wilt beginnen, type Ja. Type anders Nee.");
+            Console.WriteLine("Of als u alleen met een bepaalde moeilijkheidsgraad wilt beginnen, kunt u m invoeren en daarna 1, 2 of 3 kiezen.");
 
-            Boolean x = true;
+            Console.WriteLine("Als u wilt stoppen, druk op escape.\n");
 
+            /*
+            foreach (Question question in listOfQuestions)
+            {
+                Console.WriteLine(question.TheQuestion);
+                Console.WriteLine("Moeilijkheidsgraad: " + question.Difficulty);
+            }*/
+
+                string invoer = Console.ReadLine();
+
+                if (invoer.ToLower().Equals("ja"))
+                {
+                    sortQuestionsOnDifficulty = SortQuestionsOnDifficulty(listOfQuestions);
+
+                    foreach (Question question in sortQuestionsOnDifficulty)
+                    {
+                        Console.WriteLine(question.TheQuestion);
+                        Console.WriteLine("Moeilijkheidsgraad: " + question.Difficulty);
+
+                        Console.WriteLine("Wat is het antwoord?");
+                        Console.WriteLine(CompareAnswer(question, Console.ReadLine()));
+                    }
+                }
+                else if (invoer.ToLower().Equals("nee"))
+                {
+                    foreach (Question question in listOfQuestions)
+                    {
+                        Console.WriteLine(question.TheQuestion);
+                        Console.WriteLine("Moeilijkheidsgraad: " + question.Difficulty);
+
+                        Console.WriteLine("Wat is het antwoord?");
+                        Console.WriteLine(CompareAnswer(question, Console.ReadLine()));
+                    }
+                }
+                else if(invoer.ToLower().Equals("m"))
+                {
+                    Console.WriteLine("Kies een moeilijkheidsgraad: 1, 2 of 3");
+                    string invoer2 = Console.ReadLine();
+
+                    for (int i = 1; i <= 3; i++)
+                    {
+                        if (invoer2.Equals(i.ToString()))
+                        {
+                            displayDifficultyQuestions = DisplayDifficultyQuestions(listOfQuestions, i);
+
+                            foreach (Question question in displayDifficultyQuestions)
+                            {
+                                Console.WriteLine(question.TheQuestion);
+                                Console.WriteLine("Moeilijkheidsgraad: " + question.Difficulty);
+
+                                Console.WriteLine("Wat is het antwoord?");
+                                CompareAnswer(question, Console.ReadLine());
+                            }
+
+                        }
+                    }
+            }
+
+                
+                
 
 
         }
@@ -61,7 +120,7 @@ namespace QuizTestTestTestFinal
         public IEnumerable<Question> SortQuestionsOnDifficulty(IEnumerable<Question> question)
         {
             var list =
-               from diff in listOfOpenQuestions
+               from diff in listOfQuestions
                orderby diff.Difficulty ascending
                select diff;
             return list;
@@ -71,16 +130,15 @@ namespace QuizTestTestTestFinal
         public IEnumerable<Question> DisplayDifficultyQuestions(IEnumerable<Question> question, int difficulty)
         {
             IEnumerable<Question> list =
-               from diff in listOfOpenQuestions
+               from diff in listOfQuestions
                where diff.Difficulty == difficulty
                select diff;
-            Console.WriteLine(list.First().TheQuestion);
             return list;
         }
 
 
         //Compares the answer given against the answer that is provided with the question.
-        public string CompareAnswer(OpenQuestions question, string answer)
+        public string CompareAnswer(Question question, string answer)
         {
             if(question.Answer.ToLower() == answer.ToLower()){
                 return answer + " is the correct answer. Good job!";
